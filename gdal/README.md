@@ -1,4 +1,9 @@
 # gdal-2.1.0 built with expat support (enable reading of KML)
+The default gdal conda package is not able to read KML:
+
+https://github.com/conda/conda/issues/2398
+
+This conda package solves that issue.
 
 ## Build
 conda build gdal
