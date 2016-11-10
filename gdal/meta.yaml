@@ -1,0 +1,99 @@
+{% set version = "2.1.0" %}
+
+package:
+    name: gdal
+    version: {{ version }}
+
+source:
+    fn: gdal-{{ version }}.tar.gz
+    url: http://download.osgeo.org/gdal/{{ version }}/gdal-{{ version }}.tar.gz
+    md5: 0fc165cd947c54b132204233dfb243f1
+    patches:
+        - clang.patch  # [osx]
+        - prepend-dll.patch  # [win]
+        - install_scripts.patch
+
+build:
+    number: 0
+    features:
+        - vc9  # [win and py27]
+        - vc10  # [win and py34]
+        - vc14  # [win and py35]
+
+requirements:
+    build:
+        - python
+        - setuptools
+        - numpy
+        - hdf4
+        - hdf5
+        - geos
+        - proj4
+        - xerces-c
+        - libnetcdf
+        - kealib
+        - krb5
+        - libtiff
+        - libpng
+        - zlib  # [not win]
+        - postgresql  # [linux]
+        - curl
+        - expat
+    run:
+        - python
+        - numpy
+        - hdf4
+        - hdf5
+        - geos
+        - proj4
+        - xerces-c
+        - libnetcdf
+        - kealib
+        - krb5
+        - libtiff
+        - libpng
+        - zlib  # [not win]
+        - postgresql  # [linux]
+        - curl
+        - expat
+
+test:
+    files:
+        - os1_hw.py
+        - sites.dbf
+        - sites.sbn
+        - sites.sbx
+        - sites.shp
+        - sites.shx
+    imports:
+        - osr
+        - gdal
+        - gdalconst
+        - osgeo
+        - osgeo.ogr
+        - osgeo.gdal
+        - osgeo._gdal
+        - osgeo._gdalconst
+        - osgeo._ogr
+        - osgeo._osr
+    commands:
+        - ogrinfo sites.shp
+        - gdal_grid --version
+        - gdal_rasterize --version
+        - gdal_translate --version
+        - gdaladdo --version
+        - gdalenhance --version
+        - gdalwarp --version
+        - gdalinfo --formats
+
+about:
+    home: http://www.gdal.org/
+    license: MIT
+    summary: The Geospatial Data Abstraction Library (GDAL) with expat support (for reading KML)
+
+extra:
+  recipe-maintainers:
+    - ocefpaf
+    - kmuehlbauer
+    - gillins
+    - gmanipon
